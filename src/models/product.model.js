@@ -1,15 +1,35 @@
 import pool from '~/configs/db.configs';
 const queries = {
     getAll: 'select * from sanpham',
+    getById: 'select * from sanpham where masp = ?',
     getByName: 'select * from sanpham where tensp = ?',
+    getAllProductType: 'SELECT distinct loaisp FROM `sanpham`',
     deleteById: 'delete from sanpham where masp = ?',
     insert: 'insert into sanpham (tensp,loaisp,gia,nhacungcap, donvi, soluong) values (?,?,?,?,?,?)',
     update: 'update sanpham set tensp = ?, loaisp = ?, nhacungcap = ?, donvi = ?, soluong = ? where masp = ?',
-    getAllProductType: 'SELECT distinct loaisp FROM `sanpham`',
     addImageName: 'update sanpham set anhdaidien = ?, anhsp = ? where masp = ?',
 };
 
 const productModel = {};
+productModel.getById = async (id) => {
+    try {
+        const [product] = await pool.execute(queries.getById, [id]);
+        return product;
+    } catch (error) {
+        console.log(error);
+        return new Error(error);
+    }
+};
+productModel.getByName = async (name) => {
+    try {
+        const [product] = await pool.execute(queries.getByName, [name]);
+        console.log(product);
+        return product;
+    } catch (error) {
+        console.log(error);
+        return new Error(error);
+    }
+};
 productModel.getAll = async () => {
     try {
         const [products] = await pool.execute(queries.getAll);

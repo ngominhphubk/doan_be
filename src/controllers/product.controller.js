@@ -15,11 +15,25 @@ const checkReqBodyData = (req) => {
 
 const productController = {};
 
+productController.getById = async (req, res) => {
+    const result = await productModel.getById(req.params.masp);
+    if (result instanceof Error) return res.status(500).json('Error!!!');
+    res.status(200).json(result);
+};
+
+productController.getByName = async (req, res) => {
+    const result = await productModel.getByName(req.params.tensp);
+    console.log('controller :', result);
+    if (result instanceof Error) return res.status(500).json('Error!!!');
+    res.status(200).json(result);
+};
+
 productController.getAllProduct = async (req, res) => {
     const products = await productModel.getAll();
     if (products instanceof Error) return res.status(500).json('Error!!!');
     res.status(200).json(products);
 };
+
 productController.getAllProductType = async (req, res) => {
     const types = await productModel.getAllProductType();
     if (types instanceof Error) return res.status(500).json('Error!!!');
@@ -27,12 +41,21 @@ productController.getAllProductType = async (req, res) => {
 };
 
 productController.deleteProductWithId = async (req, res) => {
-    const result = await productModel.deleteWithId(req.params.masp);
+    const masp = req.params.masp;
+    const product = await productModel.getById(masp);
+    const avatar = product.anhdaidien;
+    const images = product.anhsp.split('||');
+    util.deleteImg(avatar);
+    images.forEach((ele) => util.deleteImg(ele));
+    const result = await productModel.deleteWithId(masp);
     if (result instanceof Error) return res.status(500).json('Error!!!');
     res.status(200).json('OK');
 };
 
 productController.insertProduct = async (req, res) => {
+    console.log('files', req.files);
+    console.log('body :', req.body);
+    console.log('header: ', req.headers);
     const imgUrl = Object.values(req.files)
         .reduce((all, cur) => {
             return (all = [...all, ...cur]);
@@ -73,13 +96,44 @@ productController.insertProduct = async (req, res) => {
 };
 
 productController.updateProduct = async (req, res) => {
+    console.log('files', req.files);
+    console.log('body :', req.body);
+    console.log('header: ', req.headers);
+
+    const imgUrl = Object.values(req.files)
+        .reduce((all, cur) => {
+            return (all = [...all, ...cur]);
+        }, [])
+        .map((ele) => ele.filename);
+    console.log(imgUrl);
+
     if (!checkReqBodyData(req)) {
+        imgUrl.forEach((element) => {
+            util.deleteImg(element);
+        });
+
         return res.json({
             message: 'Missing required parameter(s)',
         });
     }
-    const { tensp, loaisp, gia, nhacungcap, donvi, soluong } = req.body;
-    const result = await productModel.updateProduct(req.params.masp, tensp, loaisp, gia, nhacungcap, donvi, soluong);
+    const masp = req.params.masp;
+    const oldProduct = await productModel.getById(masp);
+    const oldAvatar = oldProduct.anhdaidien;
+    const oldImgs = oldProduct.anhsp.split('||');
+    const avatarImg = util.renameImg(req.files.thumb[0], result.insertId);
+    const otherImgs = req.files.images.map((ele, index) => {
+        return util.renameImg(ele, result.insertId, index);
+    });
+    const { tensp, loaisp, gia, nhacungcap, donvi, soluong, anhdaidien, anhsp } = req.body;
+    const newAvatar = anhdaidien || avatarImg;
+    const newImgs = anhsp.concat('||', otherImgs);
+    if (anhdaidien !== oldAvatar) util.deleteImg(oldAvatar);
+    oldImgs.forEach((ele) => {
+        if (!anhsp.includes(ele)) util.deleteImg(ele);
+    });
+    await productModel.updateImageName(masp, newAvatar, newImgs);
+
+    const result = await productModel.updateProduct(masp, tensp, loaisp, gia, nhacungcap, donvi, soluong);
     if (result instanceof Error) return res.status(400).json(result.message);
     return res.json('OK');
 };
