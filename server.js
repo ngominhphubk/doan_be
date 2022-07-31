@@ -3,7 +3,7 @@ import morgan from 'morgan';
 import helmet from 'helmet';
 import dotenv from 'dotenv';
 import path from 'path';
-import cors from 'cors';
+const cors = require('cors');
 //rfs can't invoke with import that make wrong
 const rfs = require('rotating-file-stream');
 import router from '~/routers';

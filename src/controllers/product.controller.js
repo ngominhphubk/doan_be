@@ -22,34 +22,36 @@ productController.getById = async (req, res) => {
 };
 
 productController.getByName = async (req, res) => {
-    const result = await productModel.getByName(req.params.tensp);
-    console.log('controller :', result);
+    const [result] = await productModel.getByName(req.params.tensp);
     if (result instanceof Error) return res.status(500).json('Error!!!');
     res.status(200).json(result);
 };
 
 productController.getAllProduct = async (req, res) => {
     const products = await productModel.getAll();
+    console.log(products);
     if (products instanceof Error) return res.status(500).json('Error!!!');
     res.status(200).json(products);
 };
 
-productController.getAllProductType = async (req, res) => {
-    const types = await productModel.getAllProductType();
-    if (types instanceof Error) return res.status(500).json('Error!!!');
-    res.status(200).json(types);
+productController.getAllProType = async (req, res) => {
+    console.log('welcome to get all type');
+    const lsp = await productModel.getAllProType();
+    console.log('controller', lsp);
+    if (lsp instanceof Error) return res.status(500).json('Error!!!');
+    res.status(200).json(lsp);
 };
 
 productController.deleteProductWithId = async (req, res) => {
     const masp = req.params.masp;
-    const product = await productModel.getById(masp);
+    const [product] = await productModel.getById(masp);
     const avatar = product.anhdaidien;
     const images = product.anhsp.split('||');
     util.deleteImg(avatar);
     images.forEach((ele) => util.deleteImg(ele));
     const result = await productModel.deleteWithId(masp);
     if (result instanceof Error) return res.status(500).json('Error!!!');
-    res.status(200).json('OK');
+    res.status(200).json(result);
 };
 
 productController.insertProduct = async (req, res) => {

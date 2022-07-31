@@ -3,7 +3,7 @@ const queries = {
     getAll: 'select * from sanpham',
     getById: 'select * from sanpham where masp = ?',
     getByName: 'select * from sanpham where tensp = ?',
-    getAllProductType: 'SELECT distinct loaisp FROM `sanpham`',
+    getAllProType: 'select distinct loaisp from sanpham where 1',
     deleteById: 'delete from sanpham where masp = ?',
     insert: 'insert into sanpham (tensp,loaisp,gia,nhacungcap, donvi, soluong) values (?,?,?,?,?,?)',
     update: 'update sanpham set tensp = ?, loaisp = ?, nhacungcap = ?, donvi = ?, soluong = ? where masp = ?',
@@ -23,7 +23,6 @@ productModel.getById = async (id) => {
 productModel.getByName = async (name) => {
     try {
         const [product] = await pool.execute(queries.getByName, [name]);
-        console.log(product);
         return product;
     } catch (error) {
         console.log(error);
@@ -33,6 +32,7 @@ productModel.getByName = async (name) => {
 productModel.getAll = async () => {
     try {
         const [products] = await pool.execute(queries.getAll);
+        console.log(products);
         return products;
     } catch (error) {
         console.log(error);
@@ -76,10 +76,11 @@ productModel.updateImageName = async (id, avatar, other) => {
         return new Error(err);
     }
 };
-productModel.getAllProductType = async () => {
+productModel.getAllProType = async () => {
     try {
-        const [types] = await pool.execute(queries.getAllProductType);
-        return types.map((type) => type.type);
+        const [lsp] = await pool.execute(queries.getAllProType);
+        console.log('router', lsp);
+        return lsp;
     } catch (err) {
         return new Error(err);
     }

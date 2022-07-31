@@ -9,5 +9,5 @@ router.post('/', handleUpload, productController.insertProduct);
 router.get('/', productController.getAllProduct);
 router.get('/:masp', productController.getById);
 router.get('/tensp/:tensp', productController.getByName);
-router.get('/type', productController.getAllProductType);
+router.get('/loai/all', productController.getAllProType);
 export default router;
