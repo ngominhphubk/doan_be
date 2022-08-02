@@ -10,4 +10,5 @@ router.get('/', productController.getAllProduct);
 router.get('/:masp', productController.getById);
 router.get('/tensp/:tensp', productController.getByName);
 router.get('/loai/all', productController.getAllProType);
+router.get('/loai/s/:loaisp', productController.getByType);
 export default router;

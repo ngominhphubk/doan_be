@@ -26,6 +26,12 @@ productController.getByName = async (req, res) => {
     if (result instanceof Error) return res.status(500).json('Error!!!');
     res.status(200).json(result);
 };
+productController.getByType = async (req, res) => {
+    const [result] = await productModel.getByType(req.params.loaisp);
+    console.log('controller : ', result);
+    if (result instanceof Error) return res.status(500).json('Error!!!');
+    res.status(200).json(result);
+};
 
 productController.getAllProduct = async (req, res) => {
     const products = await productModel.getAll();
@@ -119,16 +125,32 @@ productController.updateProduct = async (req, res) => {
         });
     }
     const masp = req.params.masp;
-    const oldProduct = await productModel.getById(masp);
+    const [oldProduct] = await productModel.getById(masp);
+    console.log('old product', oldProduct);
     const oldAvatar = oldProduct.anhdaidien;
+    console.log('old avatar', oldAvatar);
     const oldImgs = oldProduct.anhsp.split('||');
-    const avatarImg = util.renameImg(req.files.thumb[0], result.insertId);
-    const otherImgs = req.files.images.map((ele, index) => {
-        return util.renameImg(ele, result.insertId, index);
-    });
+    let avatarImg = '';
+    if (req.files.thumb) {
+        avatarImg = util.renameImg(req.files.thumb[0], masp);
+    }
+    let otherImgs = '';
+    if (req.files.images) {
+        otherImgs = req.files.images
+            .map((ele, index) => {
+                return util.renameImg(ele, masp, index);
+            })
+            .join('||');
+    }
     const { tensp, loaisp, gia, nhacungcap, donvi, soluong, anhdaidien, anhsp } = req.body;
     const newAvatar = anhdaidien || avatarImg;
-    const newImgs = anhsp.concat('||', otherImgs);
+    let newImgs = '';
+    if (anhsp.length < 1) {
+        newImgs = otherImgs;
+    }
+    if (otherImgs.length > 0) {
+        newImgs = anhsp.concat('||', otherImgs);
+    }
     if (anhdaidien !== oldAvatar) util.deleteImg(oldAvatar);
     oldImgs.forEach((ele) => {
         if (!anhsp.includes(ele)) util.deleteImg(ele);
@@ -136,6 +158,7 @@ productController.updateProduct = async (req, res) => {
     await productModel.updateImageName(masp, newAvatar, newImgs);
 
     const result = await productModel.updateProduct(masp, tensp, loaisp, gia, nhacungcap, donvi, soluong);
+    console.log('controller', result);
     if (result instanceof Error) return res.status(400).json(result.message);
     return res.json('OK');
 };
