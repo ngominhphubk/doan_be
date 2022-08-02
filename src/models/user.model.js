@@ -1,7 +1,7 @@
 import pool from '~/configs/db.configs';
 
 const queries = {
-    logIn: 'select * from nguoidung where tentk = ? or email = ? or sdt = ?',
+    logIn: 'select * from nguoidung where tentk = ? or sdt = ? or email = ?',
     insert: 'insert into nguoidung (tentk, matkhau, email, sdt) values (?,?,?,?)',
     getAllUser: 'select * from nguoidung where quyen = 1',
     getAllAdmin: 'select * from nguoidung where quyen = 0',
@@ -16,17 +16,12 @@ const queries = {
 const userModel = {};
 
 userModel.logIn = async (ten) => {
-    try {
-        const [user] = await pool.execute(queries.logIn, [ten, ten, ten]);
-        if (user.length < 1) {
-            return new Error(`ten tai khoan ${ten} khong ton tai`);
-        }
-        return user;
-    } catch (error) {
-        return new Error(error);
-    }
+    const [result] = await pool.execute(queries.logIn, [ten, ten, ten]);
+    console.log('model', result);
+    if (!result) return new Error('model wrong');
+    return result;
 };
-userModel.insert = async (tentk, mk, email, sdt) => {
+userModel.insert = async ({ tentk, mk, email, sdt }) => {
     try {
         const [checkTenTk] = await pool.execute('select manguoidung from nguoidung where tentk = ?', [tentk]);
         console.log(checkTenTk);
@@ -78,9 +73,10 @@ userModel.getById = async (id) => {
         return new Error(error);
     }
 };
-userModel.getByInfo = async (info) => {
+userModel.getByInfo = async (ins) => {
     try {
-        const info = `%${info}%`;
+        const info = `%${ins}%`;
+        console.log(info);
         const [result] = await pool.execute(queries.getByInfo, [info, info, info]);
         return result;
     } catch (error) {
