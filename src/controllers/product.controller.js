@@ -126,6 +126,13 @@ productController.updateProduct = async (req, res) => {
     }
     const masp = req.params.masp;
     const [oldProduct] = await productModel.getById(masp);
+    if (!oldProduct) {
+        console.log('controller ko tim thay san pham can update');
+        imgUrl.forEach((element) => {
+            util.deleteImg(element);
+        });
+        return new Error('ko tim thay san pham can update');
+    }
     console.log('old product', oldProduct);
     const oldAvatar = oldProduct.anhdaidien;
     console.log('old avatar', oldAvatar);
