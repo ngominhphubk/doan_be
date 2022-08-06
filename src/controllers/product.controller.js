@@ -107,14 +107,15 @@ productController.updateProduct = async (req, res) => {
     console.log('files', req.files);
     console.log('body :', req.body);
     console.log('header: ', req.headers);
-
-    const imgUrl = Object.values(req.files)
-        .reduce((all, cur) => {
-            return (all = [...all, ...cur]);
-        }, [])
-        .map((ele) => ele.filename);
-    console.log(imgUrl);
-
+    const imgUrl = [];
+    if (imgUrl.length >= 1) {
+        Object.values(req.files)
+            .reduce((all, cur) => {
+                return (all = [...all, ...cur]);
+            }, [])
+            .map((ele) => ele.filename);
+        console.log(imgUrl);
+    }
     if (!checkReqBodyData(req)) {
         imgUrl.forEach((element) => {
             util.deleteImg(element);
@@ -167,6 +168,6 @@ productController.updateProduct = async (req, res) => {
     const result = await productModel.updateProduct(masp, tensp, loaisp, gia, nhacungcap, donvi, soluong);
     console.log('controller', result);
     if (result instanceof Error) return res.status(400).json(result.message);
-    return res.json('OK');
+    return res.status(200).json('OK');
 };
 export default productController;
