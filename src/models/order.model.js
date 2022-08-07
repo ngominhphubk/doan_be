@@ -1,7 +1,7 @@
 import pool from '~/configs/db.configs';
 
 const queries = {
-    insert: 'insert into donhang (makh, tenkhnhan, diachinhan, sdt, email, trangthai, ghichu) values (?,?,?,?,?,?,?)',
+    insert: 'insert into donhang (makh, tenkhnhan, diachinhan, sdt, email, trangthai, ghichu, tgdathang) values (?,?,?,?,?,?,?,?)',
     updateState: 'update donhang set trangthai = ?, ghichu = ? where madh = ?',
     getAll: 'select * from donhang',
     getById: 'select * from donhang where madh = ?',
@@ -12,7 +12,11 @@ const queries = {
 const orderModel = {};
 orderModel.addNew = async ({ makh, tenkh, diachi, sdt, email, trangthai, ghichu }) => {
     try {
-        const [result] = await pool.execute(queries.insert, [makh, tenkh, diachi, sdt, email, trangthai, ghichu]);
+        const date = Data.now();
+        const tg = `${date.getFullYear()}-${
+            date.getMonth() + 1
+        }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        const [result] = await pool.execute(queries.insert, [makh, tenkh, diachi, sdt, email, trangthai, ghichu, tg]);
         console.log(result);
         return result;
     } catch (error) {
