@@ -56,7 +56,7 @@ userController.delete = async (req, res) => {
     return result instanceof Error ? res.status(501).json('wrong') : res.status(200).json(result);
 };
 userController.updateInfo = async (req, res) => {
-    const { hoten, gioitinh, ngaysinh, sdt, diachi, email } = req.body;
+    const { hoten, gioitinh, ngaysinh, sdt, email, diachi } = req.body;
     const id = req.params.id;
     const result = await userModel.updateInfo({ hoten, gioitinh, ngaysinh, sdt, diachi, email, id });
     return result instanceof Error ? res.status(501).json('wrong') : res.status(200).json(result);

@@ -7,7 +7,7 @@ const queries = {
     getById: 'select * from donhang where madh = ?',
     getByMakh: 'select * from donhang where makh = ?',
     getByState: 'select * from donhang where trangthai = ?',
-    danhan: 'update donhang set trangthai = "da nhan" where madh = ?',
+    danhan: 'update donhang set trangthai = 4 where madh = ?',
 };
 const orderModel = {};
 orderModel.addNew = async ({ makh, tenkh, diachi, sdt, email, trangthai, ghichu }) => {
@@ -55,9 +55,9 @@ orderModel.updateState = async ({ trangthai, ghichu, madh }) => {
         return new Error(error);
     }
 };
-orderModel.huydon = async ({ ghichu, madh }) => {
+orderModel.huydon = async ({ ghichu = '', madh }) => {
     try {
-        const trangthai = 'da huy';
+        const trangthai = 0;
         const [result] = await pool.execute(queries.updateState, [trangthai, ghichu, madh]);
         return result;
     } catch (error) {
@@ -72,7 +72,7 @@ orderModel.danhan = async (madh) => {
         return new Error(error);
     }
 };
-orderModel.getByState = async (state = 'da nhan') => {
+orderModel.getByState = async (state = 4) => {
     try {
         const [result] = await pool.execute(queries.getByState, [state]);
         return result;
