@@ -152,7 +152,7 @@ productController.updateProduct = async (req, res) => {
     }
     const { tensp, loaisp, gia, nhacungcap, donvi, soluong, anhdaidien, anhsp } = req.body;
     const newAvatar = anhdaidien || avatarImg;
-    let newImgs = '';
+    let newImgs = anhsp;
     if (anhsp.length < 1) {
         newImgs = otherImgs;
     }
