@@ -138,6 +138,8 @@ productController.updateProduct = async (req, res) => {
     const oldAvatar = oldProduct.anhdaidien;
     console.log('old avatar', oldAvatar);
     const oldImgs = oldProduct.anhsp.split('||');
+    console.log('old avatar', oldAvatar);
+    console.log('old ohter img', oldImgs);
     let avatarImg = '';
     if (req.files.thumb) {
         avatarImg = util.renameImg(req.files.thumb[0], masp);
@@ -161,7 +163,11 @@ productController.updateProduct = async (req, res) => {
     }
     if (anhdaidien !== oldAvatar) util.deleteImg(oldAvatar);
     oldImgs.forEach((ele) => {
-        if (!anhsp.includes(ele)) util.deleteImg(ele);
+        console.log('anh moi', anhsp);
+        if (!anhsp.includes(ele)) {
+            console.log('deleted img', ele);
+            util.deleteImg(ele);
+        }
     });
     await productModel.updateImageName(masp, newAvatar, newImgs);
 
