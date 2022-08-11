@@ -10,16 +10,19 @@ const queries = {
     danhan: 'update donhang set trangthai = 4 where madh = ?',
 };
 const orderModel = {};
-orderModel.addNew = async ({ makh, tenkh, diachi, sdt, email, trangthai, ghichu }) => {
+orderModel.addNew = async ({ makh, tenkh, diachi, sdt, email, ghichu }) => {
     try {
-        const date = Data.now();
+        const trangthai = 1;
+        const date = new Date();
         const tg = `${date.getFullYear()}-${
             date.getMonth() + 1
         }-${date.getDate()} ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
+        console.log('model', tg);
         const [result] = await pool.execute(queries.insert, [makh, tenkh, diachi, sdt, email, trangthai, ghichu, tg]);
         console.log(result);
         return result;
     } catch (error) {
+        console.log('sai o day order Model ');
         return new Error(error);
     }
 };

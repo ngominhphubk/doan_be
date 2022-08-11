@@ -3,9 +3,10 @@ import dsspModel from '~/models/dssp.model';
 const orderController = {};
 
 orderController.addNew = async (req, res) => {
-    const { makh, tenkh, diachi, sdt, email, trangthai, ghichu, products } = req.body;
+    console.log('controller', req.body);
+    const { makh, tenkh, diachi, sdt, email, ghichu, products } = req.body;
     const listPro = products;
-    const result = await orderModel.addNew({ makh, tenkh, diachi, sdt, email, trangthai, ghichu });
+    const result = await orderModel.addNew({ makh, tenkh, diachi, sdt, email, ghichu });
     const madh = result.insertId;
     listPro.forEach(async (ele) => {
         let { masp, soluong, tensp, tenncc, gia } = ele;
