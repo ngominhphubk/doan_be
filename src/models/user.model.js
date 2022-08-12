@@ -3,8 +3,7 @@ import pool from '~/configs/db.configs';
 const queries = {
     logIn: 'select * from nguoidung where tentk = ? or sdt = ? or email = ?',
     insert: 'insert into nguoidung (tentk, matkhau, email, sdt) values (?,?,?,?)',
-    getAllUser: 'select * from nguoidung where quyen = 1',
-    getAllAdmin: 'select * from nguoidung where quyen = 0',
+    getAllUser: 'select * from nguoidung where 1',
     getById: 'select * from nguoidung where manguoidung = ?',
     getByInfo: 'select * from nguoidung where tentk like ? or sdt like ? or email like ?',
     delete: 'delete from nguoidung where manguoidung = ?',

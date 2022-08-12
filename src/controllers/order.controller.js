@@ -34,6 +34,8 @@ orderController.getByState = async (req, res) => {
     return result instanceof Error ? res.status(501).json('wrong') : res.status(200).json(result);
 };
 orderController.updateState = async (req, res) => {
+    console.log('controller id', req.params.id);
+    console.log('controller data', req.body);
     const madh = req.params.id;
     const { trangthai, ghichu } = req.body;
     const result = await orderModel.updateState({ trangthai, ghichu, madh });
