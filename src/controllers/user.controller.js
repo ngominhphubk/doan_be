@@ -71,11 +71,17 @@ userController.updateQuyen = async (req, res) => {
     return result instanceof Error ? res.status(501).json('wrong') : res.status(200).json(result);
 };
 userController.updatePasswd = async (req, res) => {
-    const { passwd } = req.body;
+    const { oldPass, newPass } = req.body;
     const id = req.params.id;
-    const hash = await util.createPasswd(passwd);
-    const result = await userModel.updatePasswd(hash, id);
-    return result instanceof Error ? res.status(501).json('wrong') : res.status(200).json(result);
+    const [curUser] = await userModel.getById(id);
+    const checkPasswd = await util.checkPasswd(oldPass, curUser.matkhau);
+    if (checkPasswd) {
+        const hash = await util.createPasswd(newPass);
+        const result = await userModel.updatePasswd(hash, id);
+        return res.status(200).json(result);
+    } else {
+        return res.status(501).json('wrong');
+    }
 };
 
 export default userController;
