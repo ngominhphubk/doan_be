@@ -6,7 +6,7 @@ orderController.addNew = async (req, res) => {
     console.log('controller', req.body);
     const { makh, tenkh, diachi, sdt, email, ghichu, products } = req.body;
     const listPro = products;
-    const result = await orderModel.addNew({ makh, tenkh, diachi, sdt, email, ghichu });
+    const result = await orderModel.addNew({ makh, tenkh, diachi, sdt, email: email || '?', ghichu });
     const madh = result.insertId;
     listPro.forEach(async (ele) => {
         let { masp, soluong, tensp, tenncc, gia } = ele;

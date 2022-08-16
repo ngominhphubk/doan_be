@@ -50,11 +50,11 @@ productController.getAllProType = async (req, res) => {
 
 productController.deleteProductWithId = async (req, res) => {
     const masp = req.params.masp;
-    const [product] = await productModel.getById(masp);
-    const avatar = product.anhdaidien;
-    const images = product.anhsp.split('||');
-    util.deleteImg(avatar);
-    images.forEach((ele) => util.deleteImg(ele));
+    // const [product] = await productModel.getById(masp);
+    // const avatar = product.anhdaidien;
+    // const images = product.anhsp.split('||');
+    // util.deleteImg(avatar);
+    // images.forEach((ele) => util.deleteImg(ele));
     const result = await productModel.deleteWithId(masp);
     if (result instanceof Error) return res.status(500).json('Error!!!');
     res.status(200).json(result);
@@ -91,7 +91,7 @@ productController.insertProduct = async (req, res) => {
         });
     }
     const avatarImg = util.renameImg(req.files.thumb[0], result.insertId);
-    const otherImgs = req.files.images
+    const otherImgs = req.files?.images
         .map((ele, index) => {
             return util.renameImg(ele, result.insertId, index);
         })

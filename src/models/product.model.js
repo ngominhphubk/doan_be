@@ -1,11 +1,11 @@
 import pool from '~/configs/db.configs';
 const queries = {
-    getAll: 'select * from sanpham',
+    getAll: 'select * from sanpham where tinhtrang = 1',
     getById: 'select * from sanpham where masp = ?',
-    getByName: 'select * from sanpham where tensp like ?',
-    getByType: 'select * from sanpham where loaisp like ?',
-    getAllProType: 'select distinct loaisp from sanpham where 1',
-    deleteById: 'delete from sanpham where masp = ?',
+    getByName: 'select * from sanpham where tinhtrang = 1 and tensp like ?',
+    getByType: 'select * from sanpham where tinhtrang = 1 and loaisp like ?',
+    getAllProType: 'select distinct loaisp from sanpham where tinhtrang = 1',
+    deleteById: 'update sanpham set tinhtrang = 0 where masp = ?',
     insert: 'insert into sanpham (tensp,loaisp,gia,nhacungcap, donvi, soluong) values (?,?,?,?,?,?)',
     update: 'update sanpham set tensp = ?, loaisp = ?,gia = ?, nhacungcap = ?, donvi = ?, soluong = ? where masp = ?',
     addImageName: 'update sanpham set anhdaidien = ?, anhsp = ? where masp = ?',

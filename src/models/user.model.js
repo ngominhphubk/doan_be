@@ -1,12 +1,12 @@
 import pool from '~/configs/db.configs';
 
 const queries = {
-    logIn: 'select * from nguoidung where tentk = ? or sdt = ? or email = ?',
+    logIn: 'select * from nguoidung where (tentk = ? or sdt = ? or email = ?) and quyen != 9',
     insert: 'insert into nguoidung (tentk, matkhau, email, sdt) values (?,?,?,?)',
-    getAllUser: 'select * from nguoidung where 1',
+    getAllUser: 'select * from nguoidung where quyen != 9',
     getById: 'select * from nguoidung where manguoidung = ?',
-    getByInfo: 'select * from nguoidung where tentk like ? or sdt like ? or email like ?',
-    delete: 'delete from nguoidung where manguoidung = ?',
+    getByInfo: 'select * from nguoidung where (tentk like ? or sdt like ? or email like ?) and quyen != 9',
+    delete: 'update nguoidung set quyen = 9 where manguoidung = ?',
     updateInfo:
         'update nguoidung set hoten = ?, gioitinh = ?, ngaysinh = ?, sdt = ?, diachi = ?, email = ? where manguoidung = ?',
     updateQuyen: 'update nguoidung set quyen = ? where manguoidung = ?',

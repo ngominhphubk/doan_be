@@ -3,7 +3,7 @@ import pool from '~/configs/db.configs';
 const queries = {
     insert: 'insert into donhang (makh, tenkhnhan, diachinhan, sdt, email, trangthai, ghichu, tgdathang) values (?,?,?,?,?,?,?,?)',
     updateState: 'update donhang set trangthai = ?, ghichu = ? where madh = ?',
-    getAll: 'select * from donhang',
+    getAll: 'select * from donhang order by madh desc',
     getById: 'select * from donhang where madh = ?',
     getByMakh: 'select * from donhang where makh = ?',
     getByState: 'select * from donhang where trangthai = ?',
