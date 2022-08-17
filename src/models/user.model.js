@@ -25,27 +25,38 @@ userModel.insert = async ({ tentk, mk, email, sdt }) => {
         const [checkTenTk] = await pool.execute('select manguoidung from nguoidung where tentk = ?', [tentk]);
         console.log(checkTenTk);
         if (checkTenTk.length > 0) {
-            return new Error(`ten tai khoan ${tentk} da duoc dang ky`);
+            return {
+                status: 'error',
+                mess: `ten tai khoan ${tentk} da duoc dang ky`,
+            };
+            // throw Error(`ten tai khoan ${tentk} da duoc dang ky`);
         }
 
         if (email.length > 0) {
             const [checkEmail] = await pool.execute('select manguoidung from nguoidung where email = ?', [email]);
             if (checkEmail.length > 0) {
-                return new Error(`email ${email} da duoc dang ky`);
+                return {
+                    status: 'error',
+                    mess: `email ${email} da duoc dang ky`,
+                };
+                // throw Error(`email ${email} da duoc dang ky`);
             }
         }
 
         if (sdt.length > 0) {
             const [checkSdt] = await pool.execute('select manguoidung from nguoidung where sdt = ?', [sdt]);
             if (checkSdt.length > 0) {
-                return new Error(`sdt : ${sdt} da duoc dang ky`);
+                return {
+                    status: 'error',
+                    mess: `sdt : ${sdt} da duoc dang ky`,
+                };
             }
         }
         const [result] = await pool.execute(queries.insert, [tentk, mk, email, sdt]);
         console.log('modelresult', result);
         return result;
     } catch (error) {
-        return new Error(error);
+        console.log('model', error);
     }
 }; // da check
 userModel.getAllUser = async () => {
