@@ -9,6 +9,7 @@ const queries = {
     insert: 'insert into sanpham (tensp,loaisp,gia,nhacungcap, donvi, soluong) values (?,?,?,?,?,?)',
     update: 'update sanpham set tensp = ?, loaisp = ?,gia = ?, nhacungcap = ?, donvi = ?, soluong = ? where masp = ?',
     addImageName: 'update sanpham set anhdaidien = ?, anhsp = ? where masp = ?',
+    updateQuantity: 'update sanpham set soluong = ? where masp = ?',
 };
 
 const productModel = {};
@@ -97,6 +98,13 @@ productModel.getAllProType = async () => {
         return lsp;
     } catch (err) {
         return new Error(err);
+    }
+};
+productModel.updateQuantity = async ({ id, quantity }) => {
+    try {
+        const [result] = await pool.execute(queries.updateQuantity, [quantity, id]);
+    } catch (error) {
+        return new Error(error);
     }
 };
 

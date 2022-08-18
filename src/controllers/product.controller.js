@@ -176,4 +176,14 @@ productController.updateProduct = async (req, res) => {
     if (result instanceof Error) return res.status(400).json(result.message);
     return res.status(200).json('OK');
 };
+productController.updateQuantity = async (req, res) => {
+    console.log('da chay den update quatity product ', req.body);
+    let { id, quantity } = req.body;
+    if (quantity < 0) {
+        return res.status(501).json('so luong san pham < 0');
+    }
+    const result = await productModel.updateQuantity({ id: id, quantity: quantity });
+
+    return result instanceof Error ? res.status(501).json(error) : res.status(200).json(result);
+};
 export default productController;
