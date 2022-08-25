@@ -90,12 +90,14 @@ productController.insertProduct = async (req, res) => {
             result: result.message,
         });
     }
-    const avatarImg = util.renameImg(req.files.thumb[0], result.insertId);
+    const avatarImg = req?.files?.thumb ? util.renameImg(req.files.thumb[0], result.insertId) : '';
     const otherImgs = req.files?.images
-        .map((ele, index) => {
-            return util.renameImg(ele, result.insertId, index);
-        })
-        .join('||');
+        ? req.files?.images
+              .map((ele, index) => {
+                  return util.renameImg(ele, result.insertId, index);
+              })
+              .join('||')
+        : '';
     await productModel.updateImageName(result.insertId, avatarImg, otherImgs);
     return res.json({
         status: `OK`,
