@@ -27,7 +27,7 @@ userModel.insert = async ({ tentk, mk, email, sdt }) => {
         if (checkTenTk.length > 0) {
             return {
                 status: 'error',
-                mess: `ten tai khoan ${tentk} da duoc dang ky`,
+                mess: `user 'name ${tentk} is registered`,
             };
             // throw Error(`ten tai khoan ${tentk} da duoc dang ky`);
         }
@@ -37,7 +37,7 @@ userModel.insert = async ({ tentk, mk, email, sdt }) => {
             if (checkEmail.length > 0) {
                 return {
                     status: 'error',
-                    mess: `email ${email} da duoc dang ky`,
+                    mess: `email ${email} is registered`,
                 };
                 // throw Error(`email ${email} da duoc dang ky`);
             }
@@ -48,7 +48,7 @@ userModel.insert = async ({ tentk, mk, email, sdt }) => {
             if (checkSdt.length > 0) {
                 return {
                     status: 'error',
-                    mess: `sdt : ${sdt} da duoc dang ky`,
+                    mess: `phone number : ${sdt} is registered`,
                 };
             }
         }
